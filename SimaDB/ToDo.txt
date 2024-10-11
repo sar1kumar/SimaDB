@@ -1,0 +1,79 @@
+
+
+Implement the following features @sharva:
+
+########################################################
+
+Feature 1: Upload Resume pdf file and peform similarity search with user input.
+
+Feature 2: Add input validation for user input and implement error handling.
+
+Feature 3: Add authentication and authorization to the API as well as rate limiting.
+
+Feature 4: Implement a system to handle the user's input and provide a response.
+
+Feature 5: Pagination for the search results.
+
+Feature 6: Caching for the search results.
+
+Feature 7: Implement async endpoints for the API.
+
+#######################################################
+
+TESTING
+
+Implement the following tests @sharva:
+
+Test 1: Upload Resume pdf file and peform similarity search with user input.
+
+Test 2: Test input validation for user input and implement error handling.
+
+
+
+
+PAYLOAD
+
+{
+  "id": "person_007",
+  "first_name": "Saravan",
+  "last_name": "Kumar",
+  "company": "One Corp",
+  "job_role": "MD",
+  "phone_number": "0070070079",
+  "email": "sharva@onecorp.com",
+  "address": "Manhattan",
+  "experience": 15,
+  "projects": [
+    "AGI"
+  ],
+  "skills": [
+    "Common Sense"
+  ]
+}
+
+
+project_matching_input = ns_similarity.model('ProjectMatchingInput', {
+    'project_id': fields.String(required=True, description='ID of the project to match'),
+    'n_results': fields.Integer(required=False, default=5, description='Number of results to return'),
+    'min_experience': fields.Integer(required=False, description='Minimum years of experience'),
+    'required_skills': fields.List(fields.String, required=False, description='List of required skills'),
+    'max_distance': fields.Float(required=False, description='Maximum similarity distance')
+})
+
+person_matching_input = ns_similarity.model('PersonMatchingInput', {
+    'person_id': fields.String(required=True, description='ID of the person to match'),
+    'n_results': fields.Integer(required=False, default=5, description='Number of results to return'),
+    'status': fields.String(required=False, description='Filter projects by status'),
+    'max_team_size': fields.Integer(required=False, description='Maximum team size'),
+    'max_distance': fields.Float(required=False, description='Maximum similarity distance')
+})
+
+
+project_input = ns_projects.model('ProjectInput', {
+    'id': fields.String(required=True, description='ID of the project'),
+    'project_name': fields.String(required=True, description='Name of the project'),
+    'project_description': fields.String(required=True, description='Detailed description of the project'),
+    'budget': fields.Float(required=True, description='Budget allocated for the project'),
+    'start_date': fields.Date(required=True, description='Start date of the project'),
+    'end_date': fields.Date(required=True, description='Expected end date of the project')
+})

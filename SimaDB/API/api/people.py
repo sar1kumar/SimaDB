@@ -1,6 +1,7 @@
 from flask_restx import Resource, fields
 from sentence_transformers import SentenceTransformer
 from flask import request, jsonify
+import json
 
 
 def create_document_string(person_data):
@@ -30,8 +31,25 @@ class PeopleApi(Resource):
         """Retrieve all people."""
         # Fetch all data from ChromaDB
         self.collection = self.chroma_client.get_or_create_collection(name = "people1")
-        all_people = self.collection.get()  # Adjust n_results as needed
-        return jsonify(all_people)
+        all_people = self.collection.get()
+        json_data = all_people
+        transformed_data = []
+
+        for i in range(len(json_data['documents'])):
+            person_data = {
+                "person_id": f"person_{str(i+1).zfill(3)}",
+                "Description": json_data['documents'][i],
+                "address": json_data['metadatas'][i]["address"],
+                "company": json_data['metadatas'][i]["company"],
+                "email": json_data['metadatas'][i]["email"],
+                "first_name": json_data['metadatas'][i]["first_name"],
+                "job_role": json_data['metadatas'][i]["job_role"],
+                "last_name": json_data['metadatas'][i]["last_name"],
+                "phone_number": json_data['metadatas'][i]["phone_number"]
+            }
+            transformed_data.append(person_data)
+
+        return (json.dumps(transformed_data, indent=4))
 
 class PersonApi(Resource):
     def __init__(self, api, chroma_client):
